@@ -1,7 +1,7 @@
 Package: codeAsData
 Type: Package
 Title: Functions for analysing the code in R packages
-Version: 0.1.0
+Version: 0.1.1
 Author: Russ Hyde
 Maintainer: Russ Hyde <russ.hyde.data@gmail.com>
 Description: This is the supporting R package for an analysis project called `code_as_data`.
