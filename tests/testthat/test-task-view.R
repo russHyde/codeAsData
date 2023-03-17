@@ -1,4 +1,5 @@
-xml_string <- r"(<CRANTaskView>
+xml_testdata <- list(
+  string = r"(<CRANTaskView>
   <packagelist>
     <pkg priority="core">devtools</pkg>
     <pkg priority="core">knitr</pkg>
@@ -6,19 +7,22 @@ xml_string <- r"(<CRANTaskView>
     <pkg>aoos</pkg>
     <pkg>aprof</pkg>
   </packagelist>
-  </CRANTaskView>)"
+  </CRANTaskView>)",
+  packages = c("devtools", "knitr", "roxygen2", "aoos", "aprof")
+)
+xml_testdata$xml <- xml2::read_xml(xml_testdata$string)
 
 xml <- xml2::read_xml(xml_string)
 packages <- c("devtools", "knitr", "roxygen2", "aoos", "aprof")
 
 describe("import_task_view_packages", {
   it("Extracts package names from .ctv xml file", {
-    tempfile <- withr::local_tempfile()
-    xml2::write_xml(xml, tempfile)
+    tempfile <- withr::local_tempfile(fileext = ".ctv")
+    xml2::write_xml(xml_testdata$xml, tempfile)
 
     expect_equal(
       import_task_view_packages(tempfile),
-      packages
+      xml_testdata$packages
     )
   })
 })
@@ -26,8 +30,8 @@ describe("import_task_view_packages", {
 describe("extract_package_names", {
   it("Extracts package names from .ctv xml content", {
     expect_equal(
-      extract_package_names(xml),
-      packages
+      extract_package_names(xml_testdata$xml),
+      xml_testdata$packages
     )
   })
 })
