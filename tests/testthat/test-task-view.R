@@ -12,8 +12,26 @@ xml_testdata <- list(
 )
 xml_testdata$xml <- xml2::read_xml(xml_testdata$string)
 
-xml <- xml2::read_xml(xml_string)
-packages <- c("devtools", "knitr", "roxygen2", "aoos", "aprof")
+md_testdata <- list(
+  string = r"(---
+name: Bayesian
+topic: Bayesian Inference
+output: pdf_document
+---
+
+## CRAN Task View: Bayesian Inference
+
+Blah blah Bayes
+
+### General Purpose Model-Fitting Packages
+
+-   The `r pkg("arm", priority = "core")` package contains R
+functions for Bayesian inference using lm, glm, mer and etc.
+-   `r pkg("BayesianTools")` is an R package for
+general-purpose MCMC and SMC samplers, as well as plot and etc
+)",
+  packages = c("arm", "BayesianTools")
+)
 
 describe("import_task_view_packages", {
   it("Extracts package names from .ctv xml file", {
@@ -23,6 +41,16 @@ describe("import_task_view_packages", {
     expect_equal(
       import_task_view_packages(tempfile),
       xml_testdata$packages
+    )
+  })
+
+  it("Extracts package names from task-view markdown file", {
+    tempfile <- withr::local_tempfile(fileext = ".md")
+    cat(md_testdata$string, file = tempfile)
+
+    expect_equal(
+      import_task_view_packages(tempfile),
+      md_testdata$packages
     )
   })
 })
