@@ -7,8 +7,11 @@
 import_task_view_packages(url)
 }
 \arguments{
-\item{url}{A URL containing a Task View page.}
+\item{url}{A filepath or URL containing a Task View page}
+}
+\value{
+Character vector of package names
 }
 \description{
-Import a vector of package names from a "Task View" page
+The file can either be a legacy `.ctv` file or a modern markdown-format task-view.
 }
