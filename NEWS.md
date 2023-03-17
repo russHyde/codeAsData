@@ -1,3 +1,7 @@
+# codeAsData 0.1.2
+
+* Generalise `import_task_view_packages` to parse packages from a modern markdown-based task view
+
 # codeAsData 0.1.1
 
 * Add function `import_task_view_packages` for parsing package names from a .ctv format xml file
