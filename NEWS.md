@@ -1,3 +1,8 @@
+# codeAsData 0.1.3
+
+* Add `run_gitsum_workflow` function for running and storing `gitsum` results to a `.tsv`
+* Ensure that the `gitsum` workflow `.tsv` can be imported back into R using `readr::read_tsv`
+
 # codeAsData 0.1.2
 
 * Generalise `import_task_view_packages` to parse packages from a modern markdown-based task view
