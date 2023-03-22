@@ -10,21 +10,21 @@
 #' @return   tibble containing gitsum results for the repo (invisibly). This function is mainly
 #'   called to set up a .tsv as a side-effect.
 #'
-#' @importFrom   rlang   .data
+#' @importFrom   rlang   .data .env
 #' @export
 
 run_gitsum_workflow <- function(repo_path, output_path, package, r_dir_only = TRUE) {
-  gitsum_results <- get_gitsum_results(repo_path, .package = package)
+  gitsum::init_gitsum(repo_path, over_write = TRUE)
+
+  gitsum_log <- gitsum::parse_log_detailed(repo_path)
+  gitsum_results <- format_gitsum_log(gitsum_log, package = package, r_dir_only = r_dir_only)
 
   readr::write_tsv(gitsum_results, output_path, quote = "needed")
 }
 
-get_gitsum_results <- function(path, .package) {
-  gitsum::init_gitsum(path, over_write = TRUE)
-
-  gitsum::parse_log_detailed(path) |>
-    gitsum::unnest_log() |>
+format_gitsum_log <- function(x, package, r_dir_only = TRUE) {
+  gitsum::unnest_log(x) |>
     gitsum::set_changed_file_to_latest_name() |>
     dplyr::filter(stringr::str_starts(.data[["changed_file"]], "R/")) |>
-    tibble::add_column(package = .package, .before = 1)
+    tibble::add_column(package = .env[["package"]], .before = 1)
 }
