@@ -16,7 +16,7 @@
 run_gitsum_workflow <- function(repo_path, output_path, package, r_dir_only = TRUE) {
   gitsum_results <- get_gitsum_results(repo_path, .package = package)
 
-  readr::write_tsv(gitsum_results, output_path)
+  readr::write_tsv(gitsum_results, output_path, quote = "needed")
 }
 
 get_gitsum_results <- function(path, .package) {
