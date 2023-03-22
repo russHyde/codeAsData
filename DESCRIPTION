@@ -19,4 +19,12 @@ Suggests:
     xml2
 Config/testthat/edition: 3
 Imports: 
-    ctv
+    ctv,
+    dplyr,
+    gitsum (>= 0.0.9001),
+    readr,
+    rlang,
+    stringr,
+    tibble
+Remotes: 
+    lorenzwalthert/gitsum
