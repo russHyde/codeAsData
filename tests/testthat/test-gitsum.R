@@ -5,6 +5,7 @@ describe("run_gitsum_workflow on a repo with some commits", {
   dir.create("R")
   gert::git_init()
   gert::git_config_set("user.name", "Who Ever")
+  gert::git_config_set("user.email", "who.ever@notreal.com")
 
   # AND: The repo contains a single-line commit
   first_file <- withr::local_tempfile(
