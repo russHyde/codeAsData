@@ -23,8 +23,16 @@ run_gitsum_workflow <- function(repo_path, output_path, package, r_dir_only = TR
 }
 
 format_gitsum_log <- function(x, package, r_dir_only = TRUE) {
-  gitsum::unnest_log(x) |>
-    gitsum::set_changed_file_to_latest_name() |>
-    dplyr::filter(stringr::str_starts(.data[["changed_file"]], "R/")) |>
-    tibble::add_column(package = .env[["package"]], .before = 1)
+  unnested <- gitsum::set_changed_file_to_latest_name(
+    gitsum::unnest_log(x)
+  )
+
+  if (r_dir_only) {
+    unnested <- dplyr::filter(
+      unnested,
+      stringr::str_starts(.data[["changed_file"]], "R/")
+    )
+  }
+
+  tibble::add_column(unnested, package = .env[["package"]], .before = 1)
 }

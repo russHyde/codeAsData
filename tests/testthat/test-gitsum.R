@@ -47,3 +47,65 @@ describe("run_gitsum_workflow on a repo with some commits", {
     )
   })
 })
+
+make_raw_gitsum_log <- function() {
+  tibble::tibble(
+    short_hash = "abc123",
+    author_name = "Joe Bloggs",
+    date = as.POSIXct("2023-03-22 01:30:00"),
+    short_message = "New repo",
+    hash = "abc123456fgh",
+    left_parent = NA_character_,
+    right_parent = NA_character_,
+    author_email = "joe.blogs.data@blah.com",
+    weekday = "Wed",
+    month = "Mar",
+    monthday = 22L,
+    time = NA,
+    year = 2023L,
+    timezone = "+0000",
+    message = "New repo",
+    description = NA_character_,
+    total_files_changed = 2L,
+    total_insertions = 2L,
+    total_deletions = 0L,
+    commit_nr = 1L,
+    short_description = NA_character_,
+    is_merge = FALSE,
+    nested = list(
+      tibble::tibble(
+        changed_file = c("README.md", "R/my-script.R"),
+        edits = c(1L, 1L),
+        insertions = c(1L, 1L),
+        deletions = c(0L, 0L),
+        is_exact = TRUE
+      )
+    )
+  )
+}
+
+describe("format_gitsum_log", {
+  gitsum_log <- make_raw_gitsum_log()
+
+  it("restricts to R/ directory by default", {
+    formatted_gitsum_results <- format_gitsum_log(gitsum_log, package = "thePackage")
+
+    expect_true("R/my-script.R" %in% formatted_gitsum_results[["changed_file"]])
+    expect_false("README.md" %in% formatted_gitsum_results[["changed_file"]])
+  })
+
+  it("includes files outwith R/ if requested", {
+    formatted_gitsum_results <- format_gitsum_log(
+      gitsum_log, package = "thePackage", r_dir_only = FALSE
+    )
+
+    expect_true("R/my-script.R" %in% formatted_gitsum_results[["changed_file"]])
+    expect_true("README.md" %in% formatted_gitsum_results[["changed_file"]])
+  })
+
+  it("adds the package name to the gitsum table", {
+    formatted_gitsum_results <- format_gitsum_log(gitsum_log, package = "thePackage")
+
+    expect_equal(formatted_gitsum_results[["package"]], "thePackage")
+  })
+})
