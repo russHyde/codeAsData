@@ -50,12 +50,22 @@ repos:
           \.github/workflows/.*|
           data/.*|
           )$
-    -   id: lintr
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
+-   repo: local
+    hooks:
+    -   id: local-lintr
+        name: Run lintr with global R environment
+        entry: >
+          Rscript -e "devtools::load_all();
+          output <- commandArgs(trailingOnly=TRUE) |> strsplit(' ') |>
+          unlist() |> lapply(lintr::lint) |> purrr::compact();
+          if (length(output) > 0) {print(output); stop('Files not lint free')}"
+        language: system
+        files: '(\.[rR]profile|\.R|\.Rmd|\.Rnw|\.r|\.rmd|\.rnw)$'
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
