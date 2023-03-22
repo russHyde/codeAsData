@@ -36,4 +36,14 @@ describe("run_gitsum_workflow on a repo with some commits", {
       multi_line_message, gitsum_results[["message"]][2]
     )
   })
+  it("creates a .tsv that can be read back into R", {
+    # THEN: the .tsv can be read into R, and contains the same content as before saving it
+    results_from_file <- readr::read_tsv(results_file, col_types = readr::cols())
+    expect_equal(
+      single_line_message, results_from_file[["message"]][1]
+    )
+    expect_equal(
+      multi_line_message, results_from_file[["message"]][2]
+    )
+  })
 })
