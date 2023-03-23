@@ -1,3 +1,7 @@
+# codeAsData 0.1.4
+
+* [dev] Add `{precommit}` hooks
+
 # codeAsData 0.1.3
 
 * Add `run_gitsum_workflow` function for running and storing `gitsum` results to a `.tsv`

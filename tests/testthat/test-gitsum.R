@@ -102,7 +102,8 @@ describe("format_gitsum_log", {
 
   it("includes files outwith R/ if requested", {
     formatted_gitsum_results <- format_gitsum_log(
-      gitsum_log, package = "thePackage", r_dir_only = FALSE
+      gitsum_log,
+      package = "thePackage", r_dir_only = FALSE
     )
 
     expect_true("R/my-script.R" %in% formatted_gitsum_results[["changed_file"]])
